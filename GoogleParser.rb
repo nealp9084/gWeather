@@ -2,8 +2,7 @@ require 'net/http'
 require 'CGI'
 require 'rexml/document'
 require './common.rb'
-require './CurrentWeather.rb'
-require './Forecast.rb'
+require './WeatherData.rb'
 
 class GoogleParser
   attr_reader :city, :current, :forecasts
