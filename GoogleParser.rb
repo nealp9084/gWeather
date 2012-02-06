@@ -8,15 +8,15 @@ class GoogleParser
   attr_reader :city, :current, :forecasts
   def initialize location
     assert { location.length > 0 }
-    @location = location
 
+    @location = location
     @url = "http://www.google.com/ig/api?weather=#{CGI.escape location}"
     @xml = Net::HTTP.get_response(URI.parse @url).body
     @doc = REXML::Document.new @xml
-
     @forecasts = Array.new
 
-    assert { parse }
+    assert { succeeded? }
+    parse
   end
 
   def succeeded?
@@ -36,8 +36,6 @@ class GoogleParser
   end
 
   def parse
-    return false unless succeeded?
-
     for element in @doc.elements['xml_api_reply/weather']
       case element.name
       when 'forecast_information'
@@ -48,7 +46,5 @@ class GoogleParser
         handle_forecast element
       end
     end
-
-    return true
   end
 end
