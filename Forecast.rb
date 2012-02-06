@@ -1,7 +1,7 @@
 require 'rexml/document'
 
 class Forecast
-  attr_accessor :day, :low, :high, :icon_url, :condition
+  attr_reader :day, :low, :high, :icon_url, :condition
   def initialize xml_element
     @xml_element = xml_element
     parse

@@ -1,7 +1,7 @@
 require 'rexml/document'
 
 class CurrentWeather
-  attr_accessor :condition, :temp, :humidity, :icon_url, :wind
+  attr_reader :condition, :temp, :humidity, :icon_url, :wind
   def initialize xml_element
     @xml_element = xml_element
     parse

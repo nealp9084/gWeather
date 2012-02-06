@@ -6,7 +6,7 @@ require './CurrentWeather.rb'
 require './Forecast.rb'
 
 class GoogleParser
-  attr_accessor :city, :current, :forecasts
+  attr_reader :city, :current, :forecasts
   def initialize location
     assert { location.length > 0 }
     @location = location
