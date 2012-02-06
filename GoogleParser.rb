@@ -28,7 +28,7 @@ class GoogleParser
   end
 
   def handle_information element
-    @city = element.elements['city'].attributes['data'].to_s
+    @city = element.elements['city'].attributes['data'].to_s.capitalize
   end
 
   def handle_current element
