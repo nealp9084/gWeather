@@ -15,9 +15,13 @@ class GoogleParser
     @doc = REXML::Document.new @xml
     @forecasts = Array.new
 
-    assert { succeeded? }
+    if not succeeded?
+      raise 'Your location was not recognized.'
+    end
     parse
   end
+
+  protected
 
   def succeeded?
     return @doc.elements['count(//problem_cause)'].to_i == 0

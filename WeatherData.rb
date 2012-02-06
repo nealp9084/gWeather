@@ -20,15 +20,33 @@ class Forecast
     parse
   end
 
-  def handle_item name, data
-    days = { 'Sun' => 'Sunday',
-      'Mon' => 'Monday', 'Tue' => 'Tuesday',
-      'Wed' => 'Wednesday', 'Thu' => 'Thursday',
-      'Fri' => 'Friday', 'Sat' => 'Saturday' }
+  protected
 
+  def get_full_day day
+    case day
+    when 'Sun'
+      return 'Sunday'
+    when 'Mon'
+      return 'Monday'
+    when 'Tue'
+      return 'Tuesday'
+    when 'Wed'
+      return 'Wednesday'
+    when 'Thu'
+      return 'Thursday'
+    when 'Fri'
+      return 'Friday'
+    when 'Sat'
+      return 'Saturday'
+    else
+    return day
+    end
+  end
+
+  def handle_item name, data
     case name
     when 'day_of_week'
-      @day = days[data]
+      @day = get_full_day data
     when 'low'
       @low = data.to_i
     when 'high'
@@ -48,6 +66,8 @@ class CurrentWeather
     @xml_element = xml_element
     parse
   end
+
+  protected
 
   def handle_item name, data
     case name
