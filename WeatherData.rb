@@ -31,10 +31,12 @@ class CurrentWeather
   end
 
   def format_wind wind
-    return wind unless wind =~ /Wind: (\w)\b (.+)$/
+    return wind unless wind =~ /Wind: (\w{1,2})\b (.+)$/
 
     directions = { 'N' => 'North', 'E' => 'East',
-      'S' => 'South', 'W' => 'West' }
+      'S' => 'South', 'W' => 'West',
+      'NE' => 'Northeast', 'NW' => 'Northwest',
+      'SE' => 'Southeast', 'SW' => 'Southwest' }
 
     return "#{directions[$1]} #{$2}"
   end
