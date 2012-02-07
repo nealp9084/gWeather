@@ -1,5 +1,5 @@
 require 'net/http'
-require 'CGI'
+require 'cgi'
 require 'rexml/document'
 require './common.rb'
 require './WeatherData.rb'
@@ -7,7 +7,7 @@ require './WeatherData.rb'
 class GoogleParser
   attr_reader :city, :current, :forecasts
   def initialize location
-    assert { location.length > 0 }
+    raise ArgumentError, 'No location specified' if location.empty?
 
     @location = location
     @url = "http://www.google.com/ig/api?weather=#{CGI.escape location}"
@@ -15,9 +15,7 @@ class GoogleParser
     @doc = REXML::Document.new @xml
     @forecasts = Array.new
 
-    if not succeeded?
-      raise 'Your location was not recognized.'
-    end
+    raise ArgumentError, 'Your location was not recognized.' unless succeeded?
     parse
   end
 

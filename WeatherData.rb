@@ -12,6 +12,49 @@ module WeatherData
   end
 end
 
+class CurrentWeather
+  include WeatherData
+  attr_reader :condition, :temp, :humidity, :icon_url, :wind
+  def initialize xml_element
+    @xml_element = xml_element
+    parse
+  end
+
+  protected
+
+  def format_humidity data
+    if data =~ /Humidity: (\d+)%$/
+      return $1.to_i
+    else
+      return 0
+    end
+  end
+
+  def format_wind wind
+    return wind unless wind =~ /Wind: (\w)\b (.+)$/
+
+    directions = { 'N' => 'North', 'E' => 'East',
+      'S' => 'South', 'W' => 'West' }
+
+    return "#{directions[$1]} #{$2}"
+  end
+
+  def handle_item name, data
+    case name
+    when 'condition'
+      @condition = data
+    when 'temp_f'
+      @temp = data.to_i
+    when 'humidity'
+      @humidity = format_humidity data
+    when 'icon'
+      @icon_url = "http://www.google.com/#{data}"
+    when 'wind_condition'
+      @wind = format_wind data
+    end
+  end
+end
+
 class Forecast
   include WeatherData
   attr_reader :day, :low, :high, :icon_url, :condition
@@ -22,7 +65,7 @@ class Forecast
 
   protected
 
-  def get_full_day day
+  def format_day day
     case day
     when 'Sun'
       return 'Sunday'
@@ -39,14 +82,14 @@ class Forecast
     when 'Sat'
       return 'Saturday'
     else
-    return day
+      return day
     end
   end
 
   def handle_item name, data
     case name
     when 'day_of_week'
-      @day = get_full_day data
+      @day = format_day data
     when 'low'
       @low = data.to_i
     when 'high'
@@ -55,32 +98,6 @@ class Forecast
       @icon_url = "http://www.google.com/#{data}"
     when 'condition'
       @condition = data
-    end
-  end
-end
-
-class CurrentWeather
-  include WeatherData
-  attr_reader :condition, :temp, :humidity, :icon_url, :wind
-  def initialize xml_element
-    @xml_element = xml_element
-    parse
-  end
-
-  protected
-
-  def handle_item name, data
-    case name
-    when 'condition'
-      @condition = data
-    when 'temp_f'
-      @temp = data.to_i
-    when 'humidity'
-      humidity = data.to_i
-    when 'icon'
-      @icon_url = "http://www.google.com/#{data}"
-    when 'wind_condition'
-      @wind = data
     end
   end
 end
