@@ -14,7 +14,7 @@ end
 
 class CurrentWeather
   include WeatherData
-  attr_reader :condition, :temp, :humidity, :icon_url, :wind
+  attr_reader :condition, :temp, :humidity, :icon_url, :wind_direction, :wind_speed
   def initialize xml_element
     @xml_element = xml_element
     parse
@@ -24,21 +24,28 @@ class CurrentWeather
 
   def format_humidity data
     if data =~ /Humidity: (\d+)%$/
-      return $1.to_i
+    return $1.to_i
     else
-      return 0
+    return 0
     end
   end
 
-  def format_wind wind
-    return wind unless wind =~ /Wind: (\w{1,2})\b (.+)$/
+  def handle_wind wind
+    if wind =~ /Wind: (\w{1,2}) at (\d+) mph$/
+      directions =
+      {
+        'N' => 'North', 'E' => 'East',
+        'S' => 'South', 'W' => 'West',
+        'NE' => 'Northeast', 'NW' => 'Northwest',
+        'SE' => 'Southeast', 'SW' => 'Southwest'
+      }
 
-    directions = { 'N' => 'North', 'E' => 'East',
-      'S' => 'South', 'W' => 'West',
-      'NE' => 'Northeast', 'NW' => 'Northwest',
-      'SE' => 'Southeast', 'SW' => 'Southwest' }
-
-    return "#{directions[$1]} #{$2}"
+      @wind_direction = directions[$1]
+      @wind_speed = $2.to_i
+    else
+      @wind_direction = 'Unknown'
+      @wind_speed = 0
+    end
   end
 
   def handle_item name, data
@@ -52,7 +59,7 @@ class CurrentWeather
     when 'icon'
       @icon_url = "http://www.google.com/#{data}"
     when 'wind_condition'
-      @wind = format_wind data
+      handle_wind data
     end
   end
 end

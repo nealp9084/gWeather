@@ -7,7 +7,7 @@ current = gp.current
 puts "It's #{current.condition} in #{gp.city}."
 
 puts "The temperature is #{current.temp} degrees with a humidity of #{current.humidity}."
-puts "The wind is #{current.wind}, and the weather can be modeled with #{current.icon_url} ."
+puts "The wind is #{current.wind_direction} at #{current.wind_speed} mph, and the weather can be modeled with #{current.icon_url} ."
 
 for forecast in gp.forecasts
   puts ''

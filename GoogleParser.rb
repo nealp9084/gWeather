@@ -1,7 +1,6 @@
 require 'net/http'
 require 'cgi'
 require 'rexml/document'
-require './common.rb'
 require './WeatherData.rb'
 
 class GoogleParser
