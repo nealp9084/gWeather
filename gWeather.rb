@@ -1,6 +1,6 @@
 require './GoogleParser.rb'
 
-gp = GoogleParser.new(ARGV.first)
+gp = GoogleParser.new ARGV.first
 
 current = gp.current
 
