@@ -1,7 +1,7 @@
 require 'cgi'
 require 'net/http'
 require 'rexml/document'
-require './WeatherData.rb'
+require './WeatherData'
 
 class GoogleParser
   attr_reader :city, :url, :current, :forecasts
@@ -14,7 +14,7 @@ class GoogleParser
     response = Net::HTTP.get_response(URI.parse @url)
 
     if response.code.to_i != 200
-      raise HTTPError, 'Unable to receive weather data.'
+      raise Net::HTTPError.new 'Unable to receive weather data.', caller
     end
 
     xml = response.body
